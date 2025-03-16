@@ -1,0 +1,7 @@
+../Core/Src/VL53L0X.c:10:6:write_sensor_reg	16	static
+../Core/Src/VL53L0X.c:22:26:perform_single_ref_calibration	24	static
+../Core/Src/VL53L0X.c:74:19:VL53L0X_Init	24	static
+../Core/Src/VL53L0X.c:270:19:VL53L0X_MeasureDistance	32	static
+../Core/Src/VL53L0X.c:339:19:VL53L0X_ReadRegister	40	static
+../Core/Src/VL53L0X.c:348:19:VL53L0X_ReadRegisters	40	static
+../Core/Src/VL53L0X.c:355:19:VL53L0X_WriteRegister	40	static
