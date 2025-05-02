@@ -257,8 +257,6 @@ HAL_StatusTypeDef VL53L0X_Init(VL53L0X* sensor, I2C_HandleTypeDef* i2c_handle){
 
 	// sensor successfully initialized!!!
 
-	HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, 1);
-
 	return status;
 
 

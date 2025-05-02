@@ -61,7 +61,7 @@ main-build: drone_stack.elf secondary-outputs
 
 # Tool invocations
 drone_stack.elf drone_stack.map: $(OBJS) $(USER_OBJS) /Users/qiaomein/drone_stack/drone_stack/STM32L476RGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "drone_stack.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/Users/qiaomein/drone_stack/drone_stack/STM32L476RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="drone_stack.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+	arm-none-eabi-gcc -o "drone_stack.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/Users/qiaomein/drone_stack/drone_stack/STM32L476RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="drone_stack.map" -Wl,--gc-sections -static -L"/Users/qiaomein/drone_stack/drone_stack/ThirdParty/Lib/GCC" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

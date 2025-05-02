@@ -23,6 +23,9 @@
 /* USER CODE BEGIN Includes */
 
 #include "VL53L0X.h" // do CTRL+Space for code suggestions
+#include "imu.h"
+#include "arm_math.h"
+
 
 /* USER CODE END Includes */
 
@@ -49,12 +52,21 @@ typedef struct{
 /* Private variables ---------------------------------------------------------*/
 I2C_HandleTypeDef hi2c1;
 
-
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
 
 volatile bool LED_FLAG = false; // this value can be changed by the interrupt callbacks
+
+volatile float32_t angle = 0.5f * PI;
+
+volatile uint8_t button_counter = 0;
+
+HAL_StatusTypeDef status = HAL_OK;
+
+int16_t accels[3];
+
+float32_t result;
 
 /* USER CODE END PV */
 
@@ -74,14 +86,19 @@ static void MX_I2C1_Init(void);
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_PIN){
 
 	if (GPIO_PIN == B1_Pin){
+
+
 		HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+
+		LED_FLAG = ~LED_FLAG;
+
+		angle = PI * (float32_t)button_counter * 0.25f;
+
+		button_counter++;
+		return;
 	}
 
-	if (GPIO_PIN == TOF_INTERRUPT_Pin && !LED_FLAG){
 
-		LED_FLAG = true;
-
-	}
 }
 
 
@@ -121,27 +138,27 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
   VL53L0X TOF_sensor;
+  IMU imu;
+  HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, 0);
 
-  VL53L0X_Init(&TOF_sensor, &hi2c1);
+  status = VL53L0X_Init(&TOF_sensor, &hi2c1);
 
+  status = IMU_Init(&imu, &hi2c1);
+
+  if (status == HAL_OK){
+	  HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, 1);
+  }
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  if (LED_FLAG){ // if this ever triggers, interrupt from TOF was sensed
-		  for (int i =0; i< 16; ++i){
-			  HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
-			  HAL_Delay(75);
-		  }
-		  LED_FLAG = false;
 
-	  }
+	  IMU_GetAccel(&imu, &accels);
 
+	  result = arm_sin_f32(angle);
 
-	  VL53L0X_MeasureSingleDistance(&TOF_sensor);
-	  distance = TOF_sensor.distance;
 
 
     /* USER CODE END WHILE */

@@ -70,15 +70,39 @@ typedef struct {
 
 } VL53L0X;
 
+/////// struct of sequence step enables
 
-// START FUNCTION DEFINITIONS!!
+// TCC: Target CentreCheck
+// MSRC: Minimum Signal Rate Check
+// DSS: Dynamic Spad Selection
+typedef struct {
+  uint8_t tcc, msrc, dss, pre_range, final_range;
+}SequenceStepEnables;
+
+typedef struct {
+  uint16_t pre_range_vcsel_period_pclks, final_range_vcsel_period_pclks;
+
+  uint16_t msrc_dss_tcc_mclks, pre_range_mclks, final_range_mclks;
+  uint32_t msrc_dss_tcc_us,    pre_range_us,    final_range_us;
+}SequenceStepTimeouts;
+
+///////////////////// START FUNCTION DEFINITIONS!!
 
 HAL_StatusTypeDef VL53L0X_Init(VL53L0X* sensor, I2C_HandleTypeDef* i2c_handle);
 
+
+
+
+
+
 HAL_StatusTypeDef VL53L0X_MeasureSingleDistance(VL53L0X* sensor);
 
-// lower level functions
 
+
+
+
+
+// lower level functions
 
 HAL_StatusTypeDef VL53L0X_ReadRegister(VL53L0X* sensor, uint8_t reg, uint8_t* data); //data is a pointer to the where data wil be read to
 
